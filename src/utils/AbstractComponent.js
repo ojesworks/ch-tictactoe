@@ -1,8 +1,10 @@
 export class AbstractComponent extends HTMLElement {
-  constructor(styles, mode = 'open') {
+  constructor(styles, mode = { mode: 'open' }) {
     super();
-    this.attachShadow({ mode });
-    this.#buildStyles(styles);
+    if (mode) {
+      this.attachShadow(mode);
+      this.#buildStyles(styles);
+    }
   }
 
   #buildStyles(styles) {
