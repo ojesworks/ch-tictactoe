@@ -1,5 +1,4 @@
 import { AbstractComponent } from '../utils/AbstractComponent.js';
-import { createTag } from '../utils/dom.helper.js';
 
 export class HomePage extends AbstractComponent {
   static name = 'app-home-page';

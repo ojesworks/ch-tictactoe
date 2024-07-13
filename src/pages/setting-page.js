@@ -1,12 +1,27 @@
 import { AbstractComponent } from '../utils/AbstractComponent.js';
 import { Input } from '../components/Input';
-import { createTag } from '../utils/dom.helper.js';
 
 export class SettingPage extends AbstractComponent {
   static name = 'app-setting-page';
 
   static get template() {
-    return `<template><template>`;
+    return `
+      <template>
+       <section>
+          <header class="header">
+            <h1>Add your name:</h1>
+          </header>
+          <form class="container">
+            <input-component required placeholder="Enter X player name" id="x-player" name="x-player-name" label="X Player" minlength="3"></input-component>
+            <input-component required placeholder="Enter O player name" id="o-player"  name="o-player-name" label="O Player" minlength="3"></input-component>
+            <button id="setting-submit" class="btn">
+              Start
+            </button>
+          </form>
+        </section>
+
+      </template>
+    `;
   }
 
   static get style() {
@@ -26,50 +41,27 @@ export class SettingPage extends AbstractComponent {
 
   constructor() {
     super(SettingPage.style);
+    this.actionHandler = this.#action.bind(this);
   }
 
   connectedCallback() {
-    this.shadowRoot.appendChild(this.#getContainer());
+    this._buildTemplate(SettingPage.template);
+    this.#setActions();
   }
 
-  #getContainer() {
-    this.formContainer = createTag('form', { class: 'container' });
-    this.formContainer.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      const params = Object.fromEntries(new FormData(this.formContainer));
-      this.dispatchEvent(
-        new CustomEvent('action', {
-          bubbles: true,
-          composed: true,
-          detail: { action: 'goto', params },
-        })
-      );
-    });
+  #setActions() {
+    this.shadowRoot.querySelector('form').addEventListener('submit', this.actionHandler);
+  }
 
-    const xPlayer = createTag('input-component', {
-      required: true,
-      placeholder: 'Enter your name',
-      name: 'x-player-name',
-      label: 'X Player',
-      minlength: 3,
-    });
-
-    const oPlayer = createTag('input-component', {
-      required: true,
-      placeholder: 'Enter your name',
-      name: 'o-player-name',
-      label: 'O Player',
-      minlength: 3,
-    });
-
-    const submit = createTag('button', { id: 'setting-submit', class: 'btn' });
-    submit.textContent = 'Continue';
-
-    this.formContainer.append(xPlayer);
-    this.formContainer.append(oPlayer);
-    this.formContainer.append(submit);
-
-    return this.formContainer;
+  #action({ target }) {
+    const params = Object.fromEntries(new FormData(target));
+    this.dispatchEvent(
+      new CustomEvent('action', {
+        bubbles: true,
+        composed: true,
+        detail: { action: 'goto', params },
+      })
+    );
   }
 }
 

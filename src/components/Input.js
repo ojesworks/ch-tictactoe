@@ -7,13 +7,21 @@ export class Input extends AbstractComponent {
   static name = 'input-component';
 
   static get template() {
-    return `<template><template>`;
+    return `
+      <template>
+        <div class="container">
+          <label class="label" html-for="input"></label>
+          <input id="input" class="input">
+        </div>
+      </template>
+    `;
   }
 
   static get style() {
     return /*css*/ `
       .input {
         height: 40px;
+        padding: .25rem
       }
       .label {
         font-size: 1.25rem;
@@ -39,6 +47,7 @@ export class Input extends AbstractComponent {
   }
 
   connectedCallback() {
+    this._buildTemplate(Input.template);
     this.#build();
     this.#internals();
   }
@@ -60,26 +69,16 @@ export class Input extends AbstractComponent {
   }
 
   #build() {
-    const container = createTag('div', { class: 'container' });
+    this.label = this.shadowRoot.querySelector('label');
+    this.label.textContent = this.getAttribute('label');
+    this.label.htmlFor = this.getAttribute('id');
 
-    const label = createTag('label', { class: 'label', htmlFor: this.name });
-    label.textContent = this.label;
-
-    const attrs = this.getAttributeNames().reduce((temp, name) => ({ ...temp, [name]: this.getAttribute(name) }), {});
-
-    this.input = createTag('input', {
-      ...attrs,
-      id: `${attrs.name}-input`,
-      class: 'input',
-    });
-
-    container.appendChild(label);
-    container.appendChild(this.input);
-    this.shadowRoot.appendChild(container);
+    this.input = this.shadowRoot.querySelector('input');
+    this.getAttributeNames().forEach((name) => this.input.setAttribute(name, this.getAttribute(name)));
   }
 
   #internals() {
-    this._internals.setFormValue(this.value);
+    this._internals.setFormValue(this.input.value);
     this._internals.setValidity(this.input.validity, this.input.validationMessage, this.input);
     this.input.addEventListener('input', () => this.#handleInput());
   }
