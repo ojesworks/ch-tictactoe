@@ -7,6 +7,11 @@ export class AbstractComponent extends HTMLElement {
     }
   }
 
+  _buildTemplate(template) {
+    this.template = new DOMParser().parseFromString(template, 'text/html').querySelector('template');
+    this.shadowRoot.appendChild(this.template.content);
+  }
+
   #buildStyles(styles) {
     var sheet = new CSSStyleSheet();
     sheet.replaceSync(styles);

@@ -2,7 +2,12 @@ import { AbstractComponent } from '../utils/AbstractComponent.js';
 import { createTag } from '../utils/dom.helper.js';
 
 export class HomePage extends AbstractComponent {
-  static name = 'home-page';
+  static name = 'app-home-page';
+
+  static get template() {
+    return `<template><template>`;
+  }
+
   static get style() {
     return /*css*/ `
       .container {
@@ -67,10 +72,13 @@ export class HomePage extends AbstractComponent {
     button.addEventListener('click', () => {
       console.log('go to 1 vs 1');
       this.dispatchEvent(
-        new CustomEvent('change_page', {
+        new CustomEvent('action', {
           bubbles: true,
           composed: true,
-          detail: { selection: '1-vs-1' },
+          detail: {
+            action: 'goto',
+            params: { type: '1-vs-1' },
+          },
         })
       );
     });

@@ -5,6 +5,11 @@ export class Input extends AbstractComponent {
   static formAssociated = true;
 
   static name = 'input-component';
+
+  static get template() {
+    return `<template><template>`;
+  }
+
   static get style() {
     return /*css*/ `
       .input {

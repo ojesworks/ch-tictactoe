@@ -3,7 +3,12 @@ import { Input } from '../components/Input';
 import { createTag } from '../utils/dom.helper.js';
 
 export class SettingPage extends AbstractComponent {
-  static name = 'setting-page';
+  static name = 'app-setting-page';
+
+  static get template() {
+    return `<template><template>`;
+  }
+
   static get style() {
     return /*css*/ `
        .container {
@@ -31,12 +36,12 @@ export class SettingPage extends AbstractComponent {
     this.formContainer = createTag('form', { class: 'container' });
     this.formContainer.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      const settings = Object.fromEntries(new FormData(this.formContainer));
+      const params = Object.fromEntries(new FormData(this.formContainer));
       this.dispatchEvent(
-        new CustomEvent('change_page', {
+        new CustomEvent('action', {
           bubbles: true,
           composed: true,
-          detail: { settings },
+          detail: { action: 'goto', params },
         })
       );
     });
