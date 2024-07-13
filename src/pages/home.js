@@ -5,21 +5,48 @@ export class HomePage extends AbstractComponent {
   static name = 'app-home-page';
 
   static get template() {
-    return `<template><template>`;
+    return `
+      <template>
+        <section>
+          <header class="header">
+            <h1>Choose match:</h1>
+          </header>
+          <div class="actions">
+            <button id="versus-cpu" disabled="true" class="btn" data-type="cpu">
+              1 VS AI
+              <small>
+                Coming Soon
+              </small>
+            </button>
+            <button id="versus-people" class="btn"  data-type="1-vs-1">
+              1 VS 1
+            </button>
+          </div>
+        </section>
+      <template>`;
   }
 
   static get style() {
     return /*css*/ `
-      .container {
+      .actions {
         display: grid;
         height: 100%;
-        grid-template-rows: auto 1fr auto;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.24rem;
       }   
 
       .btn {
         font-size: 1.25rem;
-        width: 100%;
+        height: 100px;
         padding: .5rem 1rem;
+      }
+
+      .btn > small {
+        font-size: 0.75rem;
+        padding: .25rem;
+        color: white;
+        background: #515151;
+        border-radius: 4px;
       }
 
       .btn:disabled {
@@ -39,54 +66,31 @@ export class HomePage extends AbstractComponent {
 
   constructor() {
     super(HomePage.style);
-    this.#build();
+    this.actionHandler = this.#action.bind(this);
   }
 
-  #build() {
-    const container = createTag('section', { class: 'container' });
-    container.append(this.#getHeader());
-    container.append(this.#getBody());
-    this.shadowRoot.appendChild(container);
+  connectedCallback() {
+    this._buildTemplate(HomePage.template);
+    this.#setActions();
   }
 
-  #getHeader() {
-    const header = createTag('header', { class: 'header' });
-    const title = createTag('h1');
-    title.textContent = 'Tic Tac Toe';
-    header.append(title);
-
-    return header;
-  }
-
-  #getBody() {
-    const body = createTag('div', { class: 'actions' });
-    const comingSoon = createTag('small');
-    comingSoon.textContent = 'Coming Soon';
-
-    const buttonCPU = createTag('button', { id: 'versus-cpu', disabled: true, class: 'btn' });
-    buttonCPU.textContent = '1 VS AI';
-    buttonCPU.append(comingSoon);
-
-    const button = createTag('button', { id: 'versus-people', class: 'btn' });
-    button.textContent = '1 VS 1';
-    button.addEventListener('click', () => {
-      console.log('go to 1 vs 1');
-      this.dispatchEvent(
-        new CustomEvent('action', {
-          bubbles: true,
-          composed: true,
-          detail: {
-            action: 'goto',
-            params: { type: '1-vs-1' },
-          },
-        })
-      );
+  #setActions() {
+    this.shadowRoot.querySelectorAll('.btn').forEach((button) => {
+      button.addEventListener('click', this.actionHandler);
     });
+  }
 
-    body.append(buttonCPU);
-    body.append(button);
-
-    return body;
+  #action({ target }) {
+    this.dispatchEvent(
+      new CustomEvent('action', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          action: 'goto',
+          params: { type: target.dataset.type },
+        },
+      })
+    );
   }
 }
 

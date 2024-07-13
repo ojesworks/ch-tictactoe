@@ -35,7 +35,7 @@ export class LayoutComponent extends AbstractComponent {
 
       .container {
         max-width: 840px;
-        padding: 0.25rem;
+        padding: 1rem;
         margin: auto;
         border-radius: .25rem;
         background: white;
