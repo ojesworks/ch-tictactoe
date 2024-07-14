@@ -12,8 +12,8 @@ export class SettingPage extends AbstractComponent {
             <h1>Add your name:</h1>
           </header>
           <form class="container">
-            <input-component required placeholder="Enter X player name" id="x-player" name="x-player-name" label="X Player" minlength="3"></input-component>
-            <input-component required placeholder="Enter O player name" id="o-player"  name="o-player-name" label="O Player" minlength="3"></input-component>
+            <input-component required placeholder="Enter X player name" id="x-player" name="xPlayer" label="X Player" minlength="3"></input-component>
+            <input-component required placeholder="Enter O player name" id="o-player"  name="oPlayer" label="O Player" minlength="3"></input-component>
             <button id="setting-submit" class="btn">
               Start
             </button>
@@ -59,7 +59,7 @@ export class SettingPage extends AbstractComponent {
       new CustomEvent('action', {
         bubbles: true,
         composed: true,
-        detail: { action: 'goto', params },
+        detail: { action: 'setPlayers', params },
       })
     );
   }

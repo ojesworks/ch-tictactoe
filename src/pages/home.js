@@ -85,7 +85,7 @@ export class HomePage extends AbstractComponent {
         bubbles: true,
         composed: true,
         detail: {
-          action: 'goto',
+          action: 'setVersusMatch',
           params: { type: target.dataset.type },
         },
       })
