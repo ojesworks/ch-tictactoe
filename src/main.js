@@ -4,7 +4,8 @@ import { GamePage } from './pages/game-page';
 import { LayoutComponent } from './components/Layout';
 import { createTag } from './utils/dom.helper';
 import { TicTacToe } from './core/TicTacToe';
-import { ticTacToeValidator } from './core/GameValidation';
+import { GamePlayer } from './core/GamePlayer';
+import { GameBoard } from './core/GameBoard';
 
 const GAME_BOARD_CONFIG = { cols: 3, rows: 3, match: 3 };
 
@@ -23,7 +24,7 @@ const nextStep = {
   },
 };
 
-const initial = HomePage.name;
+const initial = GamePage.name;
 
 class App {
   #container;
@@ -31,8 +32,8 @@ class App {
   #game;
 
   constructor(initial) {
-    this.#game = new TicTacToe();
-    this.#game.setBoard(GAME_BOARD_CONFIG);
+    this.#game = new TicTacToe(new GamePlayer(), new GameBoard());
+    this.#game.setConfig(GAME_BOARD_CONFIG);
     this.#action = this.action.bind(this);
     this.createContainer();
     this.render(initial, GAME_BOARD_CONFIG);
@@ -69,30 +70,19 @@ class App {
 
     if (detail.action === 'setPlayers') {
       this.#game.setPlayers(detail.params.xPlayer, detail.params.oPlayer);
-      this.goTo(target.localName);
+      this.goTo(target.localName, { player: detail.params.xPlayer });
     }
 
     if (detail.action === 'reset') {
-      this.#game.reset();
-      this.step.player = this.#game.togglePlayer();
-      this.step.reset?.(this.#game.currentPlayerName);
+      this.#game.reset(this.step);
     }
 
     if (detail.action === 'move') {
-      if (this.#game.registerMove(detail.params.row, detail.params.col)) {
-        this.step?.addMark({ ...detail.params, player: this.#game.currentPlayerMark });
-        // Verify if it is game over
-        const gameState = this.#game.checkWin(ticTacToeValidator, detail.params);
-        if (gameState) {
-          this.step.setWinState(gameState, this.#game.currentPlayerName);
-        } else {
-          this.step.player = this.#game.togglePlayer();
-        }
-      }
+      this.#game.move(detail.params.row, detail.params.col, this.step);
     }
 
     if (detail.action === 'new') {
-      this.#game.reset();
+      this.#game.reset(this.step);
       this.goTo(target.localName);
     }
   }

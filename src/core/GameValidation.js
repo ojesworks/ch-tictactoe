@@ -15,21 +15,21 @@ export class GameValidation {
     return null;
   }
 
-  #rowCheck({ player, row, col }) {
+  #rowCheck({ mark, row, col }) {
     let desc = true;
     let asc = true;
     return (
       new Array(this.match).fill(1).reduce((count, _, current) => {
         if (!current) {
-          count += player === (this.board[row][col] ?? '');
+          count += mark === (this.board[row][col] ?? '');
         } else {
           if (desc) {
-            desc = player === (this.board[row][col - current] ?? '');
+            desc = mark === (this.board[row][col - current] ?? '');
             count += desc;
           }
 
           if (asc) {
-            asc = player === (this.board[row][col + current] ?? '');
+            asc = mark === (this.board[row][col + current] ?? '');
             count += asc;
           }
         }
@@ -38,21 +38,21 @@ export class GameValidation {
     );
   }
 
-  #colCheck({ player, row, col }) {
+  #colCheck({ mark, row, col }) {
     let desc = true;
     let asc = true;
     return (
       new Array(this.match).fill(1).reduce((count, _, current) => {
         if (!current) {
-          count += player === (this.board[row][col] ?? '');
+          count += mark === (this.board[row][col] ?? '');
         } else {
           if (desc) {
-            desc = player === (this.board[row - current]?.[col] ?? '');
+            desc = mark === (this.board[row - current]?.[col] ?? '');
             count += desc;
           }
 
           if (asc) {
-            asc = player === (this.board[row + current]?.[col] ?? '');
+            asc = mark === (this.board[row + current]?.[col] ?? '');
             count += asc;
           }
         }
@@ -62,21 +62,21 @@ export class GameValidation {
     );
   }
 
-  #dialRightCheck({ player, row, col }) {
+  #dialRightCheck({ mark, row, col }) {
     let desc = true;
     let asc = true;
     return (
       new Array(this.match).fill(1).reduce((count, _, current) => {
         if (!current) {
-          count += player === (this.board[row][col] ?? '');
+          count += mark === (this.board[row][col] ?? '');
         } else {
           if (desc) {
-            desc = player === (this.board[row - current]?.[col - current] ?? '');
+            desc = mark === (this.board[row - current]?.[col - current] ?? '');
             count += desc;
           }
 
           if (asc) {
-            asc = player === (this.board[row + current]?.[col + current] ?? '');
+            asc = mark === (this.board[row + current]?.[col + current] ?? '');
             count += asc;
           }
         }
@@ -85,21 +85,21 @@ export class GameValidation {
     );
   }
 
-  #dialLeftCheck({ player, row, col }) {
+  #dialLeftCheck({ mark, row, col }) {
     let desc = true;
     let asc = true;
     return (
       new Array(this.match).fill(1).reduce((count, _, current) => {
         if (!current) {
-          count += player === (this.board[row][col] ?? '');
+          count += mark === (this.board[row][col] ?? '');
         } else {
           if (desc) {
-            desc = player === (this.board[row - current]?.[col + current] ?? '');
+            desc = mark === (this.board[row - current]?.[col + current] ?? '');
             count += desc;
           }
 
           if (asc) {
-            asc = player === (this.board[row + current]?.[col - current] ?? '');
+            asc = mark === (this.board[row + current]?.[col - current] ?? '');
             count += asc;
           }
         }

@@ -76,8 +76,9 @@ export class GamePage extends AbstractComponent {
         margin: auto;
         min-height: 300px;
         min-width: 300px;
-        max-width: 600px;
-        max-height: 600px;
+        max-width: 400px;
+        max-height: 400px;
+        aspect-ratio: 1;
       }
 
       .actions {
@@ -97,12 +98,12 @@ export class GamePage extends AbstractComponent {
     this.#initialize();
   }
 
-  addMark({ row, col, player }) {
+  addMark({ row, col, mark }) {
     const target = this.$board.querySelector(`.box__check[data-col="${col}"][data-row="${row}"]`);
     target.setAttribute('disabled', '');
     target.setAttribute('checked', '');
-    target.value = player;
-    target.parentNode.classList.add(player);
+    target.value = mark;
+    target.parentNode.classList.add(mark);
   }
 
   set player(player) {
@@ -130,10 +131,15 @@ export class GamePage extends AbstractComponent {
     this.$body = this.shadowRoot.querySelector('.body');
     this.#setActions();
     this.#createBoxes();
+    this.player = this.getAttribute('player') ?? 'x player';
   }
 
   #createBoxes() {
     this.$body.append(this.#getBoxes());
+  }
+
+  calculateSize(x, y, size) {
+    return x < y ? size : (y / x) * 400;
   }
 
   #getBoxes() {
@@ -141,8 +147,8 @@ export class GamePage extends AbstractComponent {
     this.$board = createTag('div', { class: 'board' });
     this.$board.style.gridTemplateColumns = `repeat(${this.cols}, 1fr)`;
     this.$board.style.gridTemplateRows = `repeat(${this.rows}, 1fr)`;
-    this.$board.style.width = `${Math.max(this.cols, this.rows) * 100}px`;
-    this.$board.style.height = `${Math.min(this.cols, this.rows) * 100}px`;
+    this.$board.style.width = `${this.calculateSize(this.rows, this.cols)}px`;
+    this.$board.style.height = `${this.calculateSize(this.cols, this.rows)}px`;
 
     const box = new Array(totalBoxes).fill(true).map((_, index) => {
       const currentCol = index % this.cols;
