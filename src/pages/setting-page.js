@@ -53,8 +53,9 @@ export class SettingPage extends AbstractComponent {
     this.shadowRoot.querySelector('form').addEventListener('submit', this.actionHandler);
   }
 
-  #action({ target }) {
-    const params = Object.fromEntries(new FormData(target));
+  #action(evt) {
+    evt.preventDefault();
+    const params = Object.fromEntries(new FormData(evt.target));
     this.dispatchEvent(
       new CustomEvent('action', {
         bubbles: true,

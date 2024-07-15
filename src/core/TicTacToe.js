@@ -14,13 +14,17 @@ export class TicTacToe {
     // TODO: Create match controller by versusType.
   }
 
+  getRowsAndCols() {
+    return { cols: this.#board.cols, rows: this.#board.rows };
+  }
+
   setConfig({ match, ...value }) {
     this.#match = match;
     this.#board.setRowAndCols(value);
   }
 
-  setPlayers() {
-    this.#playerController.setPlayers(detail.params.xPlayer, detail.params.oPlayer);
+  setPlayers(value) {
+    this.#playerController.setPlayers(value.xPlayer, value.oPlayer);
   }
 
   reset(view) {

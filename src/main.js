@@ -8,23 +8,21 @@ import { GamePlayer } from './core/GamePlayer';
 import { GameBoard } from './core/GameBoard';
 
 const GAME_BOARD_CONFIG = { cols: 3, rows: 3, match: 3 };
-
 const nextStep = {
   [HomePage.name]: {
-    element: SettingPage.name,
-    attrs: {},
-  },
-  [SettingPage.name]: {
-    element: GamePage.name,
-    attrs: { ...GAME_BOARD_CONFIG },
-  },
-  [GamePage.name]: {
     element: HomePage.name,
     attrs: {},
   },
+  [SettingPage.name]: {
+    element: SettingPage.name,
+    attrs: {},
+  },
+  [GamePage.name]: {
+    element: GamePage.name,
+    attrs: { ...GAME_BOARD_CONFIG },
+  },
 };
-
-const initial = GamePage.name;
+const initial = HomePage.name;
 
 class App {
   #container;
@@ -47,6 +45,7 @@ class App {
     }
 
     const newStep = nextStep[to];
+    console.log(to);
     if (newStep) {
       this.render(newStep.element, { ...newStep.attrs, ...extra });
     } else {
@@ -65,12 +64,12 @@ class App {
     // TODO: create action map
     if (detail.action === 'setVersusMatch') {
       this.#game.versusMatch = detail.params.type;
-      this.goTo(target.localName);
+      this.goTo(SettingPage.name);
     }
 
     if (detail.action === 'setPlayers') {
       this.#game.setPlayers(detail.params.xPlayer, detail.params.oPlayer);
-      this.goTo(target.localName, { player: detail.params.xPlayer });
+      this.goTo(GamePage.name, { player: detail.params.xPlayer });
     }
 
     if (detail.action === 'reset') {
@@ -83,7 +82,7 @@ class App {
 
     if (detail.action === 'new') {
       this.#game.reset(this.step);
-      this.goTo(target.localName);
+      this.goTo(HomePage.name);
     }
   }
 
